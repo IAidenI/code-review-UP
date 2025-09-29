@@ -24,7 +24,7 @@ export class TicTacToe {
   }
 
   public winner(): string {
-    return this._grid.findRowFullWithSamePlayer();
+    return this._grid.findFullRowWithSameMark();
   }
 
   private ensureFirstPlayerIsX(mark: string) {
@@ -111,16 +111,16 @@ class Grid {
       .updateMark(mark);
   }
 
-  public findRowFullWithSamePlayer(): string {
-    if (this.isRowFull(topRow) && this.isRowFullWithSameSymbol(topRow)) {
+  public findFullRowWithSameMark(): string {
+    if (this.isRowFull(topRow) && this.rowHasUniformMark(topRow)) {
       return this.cellAt(topRow, leftCol)!.Mark;
     }
 
-    if (this.isRowFull(middleRow) && this.isRowFullWithSameSymbol(middleRow)) {
+    if (this.isRowFull(middleRow) && this.rowHasUniformMark(middleRow)) {
       return this.cellAt(middleRow, leftCol)!.Mark;
     }
 
-    if (this.isRowFull(bottomRow) && this.isRowFullWithSameSymbol(bottomRow)) {
+    if (this.isRowFull(bottomRow) && this.rowHasUniformMark(bottomRow)) {
       return this.cellAt(bottomRow, leftCol)!.Mark;
     }
 
@@ -135,7 +135,7 @@ class Grid {
     );
   }
 
-  private isRowFullWithSameSymbol(row: number) {
+  private rowHasUniformMark(row: number) {
     return (
       this.cellAt(row, leftCol)!.hasSameMarkAs(this.cellAt(row, centerCol)!) &&
       this.cellAt(row, rightCol)!.hasSameMarkAs(this.cellAt(row, centerCol)!)
