@@ -14,13 +14,17 @@ export class TicTacToe {
   private _lastMark = EMPTY_MARK;
   private _grid: Grid = new Grid();
 
-  public Play(mark: string, row: number, col: number): void {
+  public placeMark(mark: string, row: number, col: number): void {
     this.ensureFirstPlayerIsX(mark);
     this.ensureTurnsAlternate(mark);
     this.ensureCellIsEmpty(row, col);
 
     this.updateLastMark(mark);
     this.updateGrid(mark, row, col);
+  }
+
+  public winner(): string {
+    return this._grid.findRowFullWithSamePlayer();
   }
 
   private ensureFirstPlayerIsX(mark: string) {
@@ -49,10 +53,6 @@ export class TicTacToe {
 
   private updateGrid(mark: string, row: number, col: number) {
     this._grid.writeCellAt(mark, row, col);
-  }
-
-  public Winner(): string {
-    return this._grid.findRowFullWithSamePlayer();
   }
 }
 
@@ -100,7 +100,9 @@ class Grid {
   }
 
   public cellAt(row: number, col: number): Cell {
-    return this._cells.find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, EMPTY_MARK)))!;
+    return this._cells.find((c: Cell) =>
+      c.hasSameCoordinatesAs(new Cell(row, col, EMPTY_MARK))
+    )!;
   }
 
   public writeCellAt(mark: string, row: number, col: number): void {
