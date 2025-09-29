@@ -111,30 +111,30 @@ class Board {
 
   public findRowFullWithSamePlayer(): string {
     if (this.isRowFull(firstRow) && this.isRowFullWithSamePlayer(firstRow)) {
-      return this.playerAt(firstRow, firstColumn);
+      return this.playerAt(new Tile(firstRow, firstColumn, noPlayer));
     }
 
     if (this.isRowFull(secondRow) && this.isRowFullWithSamePlayer(secondRow)) {
-      return this.playerAt(secondRow, firstColumn);
+      return this.playerAt(new Tile(secondRow, firstColumn, noPlayer));
     }
 
     if (this.isRowFull(thirdRow) && this.isRowFullWithSamePlayer(thirdRow)) {
-      return this.playerAt(thirdRow, firstColumn);
+      return this.playerAt(new Tile(thirdRow, firstColumn, noPlayer));
     }
 
     return noPlayer;
   }
 
-  private hasSamePlayer(x: number, y: number, otherX: number, otherY: number) {
-    return this.TileAt(x, y)!.hasSamePlayerAs(this.TileAt(otherX, otherY)!);
+  private hasSamePlayer(a: Tile, b: Tile) {
+    return this.tileAt(a)!.hasSamePlayerAs(this.tileAt(b)!);
   }
 
-  private playerAt(x: number, y: number) {
-    return this.TileAt(x, y)!.Player;
+  private playerAt(tile: Tile) {
+    return this.tileAt(tile)!.Player;
   }
 
-  private TileAt(x: number, y: number): Tile {
-    return this._plays.find((t: Tile) => t.hasSameCoordinatesAs(new Tile(x, y, noPlayer)))!;
+  private tileAt(tile: Tile): Tile {
+    return this._plays.find((t: Tile) => t.hasSameCoordinatesAs(tile))!;
   }
 
   private isRowFull(row: number) {
@@ -147,8 +147,8 @@ class Board {
 
   private isRowFullWithSamePlayer(row: number) {
     return (
-      this.hasSamePlayer(row, firstColumn, row, secondColumn) &&
-      this.hasSamePlayer(row, secondColumn, row, thirdColumn)
+      this.hasSamePlayer(new Tile(row, firstColumn, noPlayer), new Tile(row, secondColumn, noPlayer)) &&
+      this.hasSamePlayer(new Tile(row, secondColumn, noPlayer), new Tile(row, thirdColumn, noPlayer))
     );
   }
 }
