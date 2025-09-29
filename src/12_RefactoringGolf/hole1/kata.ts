@@ -7,48 +7,48 @@ const leftCol = 0;
 const centerCol = 1;
 const rightCol = 2;
 
-const playerO = 'O';
-const emptyPlay = ' ';
+const MARK_O = 'O';
+const EMPTY_MARK = ' ';
 
 export class TicTacToe {
-  private _lastSymbol = emptyPlay;
+  private _lastMark = EMPTY_MARK;
   private _grid: Grid = new Grid();
 
-  public Play(symbol: string, row: number, col: number): void {
-    this.validateFirstMove(symbol);
-    this.validatePlayer(symbol);
-    this.validatePositionIsEmpty(row, col);
+  public Play(mark: string, row: number, col: number): void {
+    this.ensureFirstPlayerIsX(mark);
+    this.ensureTurnsAlternate(mark);
+    this.ensureCellIsEmpty(row, col);
 
-    this.updateLastPlayer(symbol);
-    this.updateGrid(symbol, row, col);
+    this.updateLastMark(mark);
+    this.updateGrid(mark, row, col);
   }
 
-  private validateFirstMove(player: string) {
-    if (this._lastSymbol == emptyPlay) {
-      if (player == playerO) {
+  private ensureFirstPlayerIsX(mark: string) {
+    if (this._lastMark == EMPTY_MARK) {
+      if (mark == MARK_O) {
         throw new Error('Invalid first player');
       }
     }
   }
 
-  private validatePlayer(player: string) {
-    if (player == this._lastSymbol) {
+  private ensureTurnsAlternate(mark: string) {
+    if (mark == this._lastMark) {
       throw new Error('Invalid next player');
     }
   }
 
-  private validatePositionIsEmpty(row: number, col: number) {
+  private ensureCellIsEmpty(row: number, col: number) {
     if (this._grid.cellAt(row, col).isNotEmpty) {
       throw new Error('Invalid position');
     }
   }
 
-  private updateLastPlayer(player: string) {
-    this._lastSymbol = player;
+  private updateLastMark(mark: string) {
+    this._lastMark = mark;
   }
 
-  private updateGrid(player: string, row: number, col: number) {
-    this._grid.writeCellAt(player, row, col);
+  private updateGrid(mark: string, row: number, col: number) {
+    this._grid.writeCellAt(mark, row, col);
   }
 
   public Winner(): string {
@@ -59,32 +59,32 @@ export class TicTacToe {
 class Cell {
   private row: number = 0;
   private col: number = 0;
-  private symbol: string = ' ';
+  private mark: string = EMPTY_MARK;
 
-  constructor(row: number, col: number, symbol: string) {
+  constructor(row: number, col: number, mark: string) {
     this.row = row;
     this.col = col;
-    this.symbol = symbol;
+    this.mark = mark;
   }
 
-  get Symbol() {
-    return this.symbol;
+  get Mark() {
+    return this.mark;
   }
 
   get isNotEmpty() {
-    return this.Symbol !== emptyPlay;
+    return this.Mark !== EMPTY_MARK;
   }
 
-  hasSameSymbolAs(other: Cell) {
-    return this.Symbol === other.Symbol;
+  hasSameMarkAs(other: Cell) {
+    return this.Mark === other.Mark;
   }
 
   hasSameCoordinatesAs(other: Cell) {
     return this.row == other.row && this.col == other.col;
   }
 
-  updateSymbol(newSymbol: string) {
-    this.symbol = newSymbol;
+  updateMark(newMark: string) {
+    this.mark = newMark;
   }
 }
 
@@ -94,35 +94,35 @@ class Grid {
   constructor() {
     for (let r = topRow; r <= bottomRow; r++) {
       for (let c = leftCol; c <= rightCol; c++) {
-        this._cells.push(new Cell(r, c, emptyPlay));
+        this._cells.push(new Cell(r, c, EMPTY_MARK));
       }
     }
   }
 
   public cellAt(row: number, col: number): Cell {
-    return this._cells.find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, emptyPlay)))!;
+    return this._cells.find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, EMPTY_MARK)))!;
   }
 
-  public writeCellAt(symbol: string, row: number, col: number): void {
+  public writeCellAt(mark: string, row: number, col: number): void {
     this._cells
-      .find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, symbol)))!
-      .updateSymbol(symbol);
+      .find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, mark)))!
+      .updateMark(mark);
   }
 
   public findRowFullWithSamePlayer(): string {
     if (this.isRowFull(topRow) && this.isRowFullWithSameSymbol(topRow)) {
-      return this.cellAt(topRow, leftCol)!.Symbol;
+      return this.cellAt(topRow, leftCol)!.Mark;
     }
 
     if (this.isRowFull(middleRow) && this.isRowFullWithSameSymbol(middleRow)) {
-      return this.cellAt(middleRow, leftCol)!.Symbol;
+      return this.cellAt(middleRow, leftCol)!.Mark;
     }
 
     if (this.isRowFull(bottomRow) && this.isRowFullWithSameSymbol(bottomRow)) {
-      return this.cellAt(bottomRow, leftCol)!.Symbol;
+      return this.cellAt(bottomRow, leftCol)!.Mark;
     }
 
-    return emptyPlay;
+    return EMPTY_MARK;
   }
 
   private isRowFull(row: number) {
@@ -135,8 +135,8 @@ class Grid {
 
   private isRowFullWithSameSymbol(row: number) {
     return (
-      this.cellAt(row, leftCol)!.hasSameSymbolAs(this.cellAt(row, centerCol)!) &&
-      this.cellAt(row, rightCol)!.hasSameSymbolAs(this.cellAt(row, centerCol)!)
+      this.cellAt(row, leftCol)!.hasSameMarkAs(this.cellAt(row, centerCol)!) &&
+      this.cellAt(row, rightCol)!.hasSameMarkAs(this.cellAt(row, centerCol)!)
     );
   }
 }
