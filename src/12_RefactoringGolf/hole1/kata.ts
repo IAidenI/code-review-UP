@@ -1,11 +1,11 @@
 /* eslint-disable */
 
-const firstRow = 0;
-const secondRow = 1;
-const thirdRow = 2;
-const firstColumn = 0;
-const secondColumn = 1;
-const thirdColumn = 2;
+const topRow = 0;
+const middleRow = 1;
+const bottomRow = 2;
+const leftCol = 0;
+const centerCol = 1;
+const rightCol = 2;
 
 const playerO = 'O';
 const emptyPlay = ' ';
@@ -92,36 +92,34 @@ class Grid {
   private _cells: Cell[] = [];
 
   constructor() {
-    for (let r = firstRow; r <= thirdRow; r++) {
-      for (let c = firstColumn; c <= thirdColumn; c++) {
+    for (let r = topRow; r <= bottomRow; r++) {
+      for (let c = leftCol; c <= rightCol; c++) {
         this._cells.push(new Cell(r, c, emptyPlay));
       }
     }
   }
 
   public cellAt(row: number, col: number): Cell {
-    return this._cells.find((cell: Cell) =>
-      cell.hasSameCoordinatesAs(new Cell(row, col, emptyPlay))
-    )!;
+    return this._cells.find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, emptyPlay)))!;
   }
 
   public writeCellAt(symbol: string, row: number, col: number): void {
     this._cells
-      .find((cell: Cell) => cell.hasSameCoordinatesAs(new Cell(row, col, symbol)))!
+      .find((c: Cell) => c.hasSameCoordinatesAs(new Cell(row, col, symbol)))!
       .updateSymbol(symbol);
   }
 
   public findRowFullWithSamePlayer(): string {
-    if (this.isRowFull(firstRow) && this.isRowFullWithSameSymbol(firstRow)) {
-      return this.cellAt(firstRow, firstColumn)!.Symbol;
+    if (this.isRowFull(topRow) && this.isRowFullWithSameSymbol(topRow)) {
+      return this.cellAt(topRow, leftCol)!.Symbol;
     }
 
-    if (this.isRowFull(secondRow) && this.isRowFullWithSameSymbol(secondRow)) {
-      return this.cellAt(secondRow, firstColumn)!.Symbol;
+    if (this.isRowFull(middleRow) && this.isRowFullWithSameSymbol(middleRow)) {
+      return this.cellAt(middleRow, leftCol)!.Symbol;
     }
 
-    if (this.isRowFull(thirdRow) && this.isRowFullWithSameSymbol(thirdRow)) {
-      return this.cellAt(thirdRow, firstColumn)!.Symbol;
+    if (this.isRowFull(bottomRow) && this.isRowFullWithSameSymbol(bottomRow)) {
+      return this.cellAt(bottomRow, leftCol)!.Symbol;
     }
 
     return emptyPlay;
@@ -129,16 +127,16 @@ class Grid {
 
   private isRowFull(row: number) {
     return (
-      this.cellAt(row, firstColumn)!.isNotEmpty &&
-      this.cellAt(row, secondColumn)!.isNotEmpty &&
-      this.cellAt(row, thirdColumn)!.isNotEmpty
+      this.cellAt(row, leftCol)!.isNotEmpty &&
+      this.cellAt(row, centerCol)!.isNotEmpty &&
+      this.cellAt(row, rightCol)!.isNotEmpty
     );
   }
 
   private isRowFullWithSameSymbol(row: number) {
     return (
-      this.cellAt(row, firstColumn)!.hasSameSymbolAs(this.cellAt(row, secondColumn)!) &&
-      this.cellAt(row, thirdColumn)!.hasSameSymbolAs(this.cellAt(row, secondColumn)!)
+      this.cellAt(row, leftCol)!.hasSameSymbolAs(this.cellAt(row, centerCol)!) &&
+      this.cellAt(row, rightCol)!.hasSameSymbolAs(this.cellAt(row, centerCol)!)
     );
   }
 }
