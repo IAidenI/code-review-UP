@@ -10,7 +10,7 @@ const thirdColumn = 2;
 const playerO = 'O';
 const emptyPlay = ' ';
 
-export class Game {
+export class TicTacToe {
   private _lastSymbol = emptyPlay;
   private _board: Board = new Board();
 
