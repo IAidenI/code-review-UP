@@ -15,12 +15,14 @@ export class Game {
   private _board: Board = new Board();
 
   public Play(player: string, x: number, y: number): void {
+    const tile = new Tile(x, y, player);
+
     this.validateFirstMove(player);
     this.validatePlayer(player);
-    this.validatePositionIsEmpty(x, y);
+    this.validatePositionIsEmpty(tile);
 
     this.updateLastPlayer(player);
-    this.updateBoard(new Tile(x, y, player));
+    this.updateBoard(tile);
   }
 
   private validateFirstMove(player: string) {
@@ -37,8 +39,8 @@ export class Game {
     }
   }
 
-  private validatePositionIsEmpty(x: number, y: number) {
-    if (this._board.isTilePlayedAt(x, y)) {
+  private validatePositionIsEmpty(tile: Tile) {
+    if (this._board.isTilePlayedAt(tile.x, tile.y)) {
       throw new Error('Invalid position');
     }
   }
@@ -57,8 +59,8 @@ export class Game {
 }
 
 class Tile {
-  private x: number = 0;
-  private y: number = 0;
+  public x: number = 0;
+  public y: number = 0;
   private player: string = noPlayer;
 
   constructor(x: number, y: number, player: string) {
