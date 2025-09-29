@@ -40,7 +40,7 @@ export class Game {
   }
 
   private validatePositionIsEmpty(tile: Tile) {
-    if (this._board.isTilePlayedAt(tile.x, tile.y)) {
+    if (this._board.isTilePlayed(tile)) {
       throw new Error('Invalid position');
     }
   }
@@ -101,9 +101,8 @@ class Board {
     }
   }
 
-  public isTilePlayedAt(x: number, y: number) {
-    return this._plays.find((t: Tile) => t.hasSameCoordinatesAs(new Tile(x, y, noPlayer)))!
-      .isNotEmpty;
+  public isTilePlayed(tile: Tile) {
+    return this._plays.find((t: Tile) => t.hasSameCoordinatesAs(tile))!.isNotEmpty;
   }
 
   public AddTileAt(tile: Tile): void {
@@ -140,9 +139,9 @@ class Board {
 
   private isRowFull(row: number) {
     return (
-      this.isTilePlayedAt(row, firstColumn) &&
-      this.isTilePlayedAt(row, secondColumn) &&
-      this.isTilePlayedAt(row, thirdColumn)
+      this.isTilePlayed(new Tile(row, firstColumn, noPlayer)) &&
+      this.isTilePlayed(new Tile(row, secondColumn, noPlayer)) &&
+      this.isTilePlayed(new Tile(row, thirdColumn, noPlayer))
     );
   }
 
